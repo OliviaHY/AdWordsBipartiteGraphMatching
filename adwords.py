@@ -95,16 +95,12 @@ def balance(queries, kywds2advtser, bids, budgets):
 			if  all(budget <=0 for budget in allbudgets):
 				break
 			if bids[key] <= budgets[advertiser]:
-				allbids.append(bids[key])
-				xu = 1-float(budgets[advertiser])/budgets0[advertiser]
-				y = bids[key]*(1-math.exp(xu-1))
-				print xu,y
-				if y >= temp:
+				allbids.append(bids[key])				
+				if budgets[advertiser] >= temp:
 					print 'here'
-					temp = y
+					temp = budgets[advertiser]
 					winner = advertiser
 					highest = bids[key]
-				print y
 		if winner != None:
 			newbudget = budgets[winner] - bids[(winner,query)]
 			del(budgets[winner])
@@ -150,6 +146,18 @@ def main():
 		for i in range(0,runnumber):
 			random.shuffle(queries)
 			temp = msvv(queries, kywds2advtser, bids, budgets)
+			budgets  = dict((int(i[0]),int(i[3])) for i in matrix if i[3]!='')
+			#print temp
+			revenues.append(temp)
+		result = sum(revenues)/runnumber
+		competRate = result/totalBudget
+		print result
+		print competRate
+	elif method.lower() == 'balance':
+		revenues = []
+		for i in range(0,runnumber):
+			random.shuffle(queries)
+			temp = balance(queries, kywds2advtser, bids, budgets)
 			budgets  = dict((int(i[0]),int(i[3])) for i in matrix if i[3]!='')
 			#print temp
 			revenues.append(temp)
