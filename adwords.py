@@ -62,20 +62,20 @@ def msvv(queries, kywds2advtser, bids, budgets):
 				allbids.append(bids[key])
 				xu = 1-float(budgets[advertiser])/budgets0[advertiser]
 				y = bids[key]*(1-math.exp(xu-1))
-				print xu,y
+				#print xu,y
 				if y >= temp:
-					print 'here'
+					#print 'here'
 					temp = y
 					winner = advertiser
 					highest = bids[key]
-				print y
+				#print y
 		if winner != None:
 			newbudget = budgets[winner] - bids[(winner,query)]
 			del(budgets[winner])
 			budgets[winner] = newbudget
 		result[query]=winner
 		revenue += highest
-	print result
+	#print result
 	return revenue
 
 def balance(queries, kywds2advtser, bids, budgets):
@@ -97,7 +97,7 @@ def balance(queries, kywds2advtser, bids, budgets):
 			if bids[key] <= budgets[advertiser]:
 				allbids.append(bids[key])				
 				if budgets[advertiser] >= temp:
-					print 'here'
+					#print 'here'
 					temp = budgets[advertiser]
 					winner = advertiser
 					highest = bids[key]
@@ -107,7 +107,6 @@ def balance(queries, kywds2advtser, bids, budgets):
 			budgets[winner] = newbudget
 		result[query]=winner
 		revenue += highest
-	print result
 	return revenue
 
 def main():
@@ -128,7 +127,10 @@ def main():
 
 	totalBudget = sum(budgets.values())
 	method = sys.argv[1]
-	runnumber = 5
+	#--------------please set this number as how many times you want to run the code
+	runnumber = 1
+	#-------------------------------------------------------------------------------------
+	random.seed(0)
 	if method.lower() == 'greedy':
 		revenues = []
 		for i in range(0,runnumber):
@@ -137,10 +139,6 @@ def main():
 			budgets  = dict((int(i[0]),int(i[3])) for i in matrix if i[3]!='')
 			#print temp
 			revenues.append(temp)
-		result = sum(revenues)/runnumber
-		competRate = result/totalBudget
-		print result
-		print competRate
 	elif method.lower() == 'msvv':
 		revenues = []
 		for i in range(0,runnumber):
@@ -149,10 +147,6 @@ def main():
 			budgets  = dict((int(i[0]),int(i[3])) for i in matrix if i[3]!='')
 			#print temp
 			revenues.append(temp)
-		result = sum(revenues)/runnumber
-		competRate = result/totalBudget
-		print result
-		print competRate
 	elif method.lower() == 'balance':
 		revenues = []
 		for i in range(0,runnumber):
@@ -161,10 +155,10 @@ def main():
 			budgets  = dict((int(i[0]),int(i[3])) for i in matrix if i[3]!='')
 			#print temp
 			revenues.append(temp)
-		result = sum(revenues)/runnumber
-		competRate = result/totalBudget
-		print result
-		print competRate
+	result = sum(revenues)/runnumber
+	competRate = result/totalBudget
+	print 'Revenue:',result
+	print 'Competitive Rate:',competRate
 
 if __name__ == "__main__":
     main()
